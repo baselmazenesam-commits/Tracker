@@ -8,7 +8,7 @@ const GOAL_CARBS = Math.round((GOAL_CALORIES - GOAL_PROTEIN * 4 - GOAL_FAT_G * 9
 const GOAL_FAT = GOAL_FAT_G;
 const GOAL_FIBER = 35;
 const GOAL_WATER = 3500;
-const GOAL_SUGAR = 25; // WHO recommendation for fat loss — added sugars only
+const GOAL_SUGAR = 25; // WHO recommendation for fat loss - added sugars only
 const BMR = Math.round(10 * 108 + 6.25 * 183 - 5 * 24 + 5);
 const TDEE = Math.round(BMR * 1.55);
 
@@ -328,11 +328,11 @@ const TIPS = [
   "Protein is your #1 priority every single day at 1800 kcal.",
   "Sleep 7-9hrs. Poor sleep spikes cortisol and stalls fat loss.",
   "Weigh every morning after bathroom. Track the weekly average.",
-  "Progressive overload — add weight or reps each week.",
+  "Progressive overload - add weight or reps each week.",
   "Veggies are basically free calories. Fill half your plate.",
   "At 1800 kcal you should lose more than 1kg per week. Stay consistent.",
   "10k steps per day burns 300-400 extra kcal without the gym.",
-  "Don't skip breakfast — it regulates hunger hormones all day.",
+  "Don't skip breakfast - it regulates hunger hormones all day.",
   "Consistency beats perfection. One bad meal changes nothing.",
 ];
 
@@ -388,57 +388,32 @@ function Ring({ value, max, color, label }) {
 const MEALS_DB = [
   {
     name: "Chia Yogurt Bowl (2x Juhayna 0.2% 170g + 25g chia)",
-    cal: 315,
-    p: 36.2,
-    c: 24.4,
-    f: 8.55,
-    fb: 8.3,
-    s: 0,
+    cal: 315, p: 36.2, c: 24.4, f: 8.55, fb: 8.3, s: 0,
     desc: "2x Juhayna Greek Yogurt 0.2% fat (170g each) + 25g chia seeds"
   },
   {
     name: "Egg Power Bowl (3 eggs + 3 whites + 150g cottage cheese)",
-    cal: Math.round(3*78 + 3*17 + 1.5*98),
-    p: +(3*6 + 3*3.6 + 1.5*11).toFixed(1),
-    c: +(3*0.6 + 3*0.2 + 1.5*3.4).toFixed(1),
-    f: +(3*5 + 3*0 + 1.5*4.3).toFixed(1),
-    fb: 0, s: +(1.5*3).toFixed(1),
+    cal: 421, p: 36.9, c: 7.1, f: 21.5, fb: 0, s: 4.5,
     desc: "3 boiled eggs + 3 egg whites + 150g full fat cottage cheese"
   },
   {
-    name: "High Protein Breakfast (2 eggs + 2 HiPRO + Rich Bake toast)",
-    cal: 2*78 + 158 + 130,
-    p: +(2*6 + 20 + 6).toFixed(1),
-    c: +(2*0.6 + 13 + 24).toFixed(1),
-    f: +(2*5 + 2.4 + 2).toFixed(1),
-    fb: +(0 + 0 + 4).toFixed(1), s: +(0 + 11 + 0).toFixed(1),
+    name: "High Protein Breakfast (2 eggs + HiPRO Strawberry + Rich Bake toast)",
+    cal: 444, p: 44, c: 39.2, f: 14.4, fb: 4, s: 11,
     desc: "2 boiled eggs + HiPRO Danone Strawberry + Rich Bake Brown Toast 2 slices"
   },
   {
     name: "Chicken & Rice (250g chicken + 100g rice)",
-    cal: 413 + 130,
-    p: +(77 + 2.7).toFixed(1),
-    c: +(0 + 28).toFixed(1),
-    f: +(9 + 0.3).toFixed(1),
-    fb: 0.4, s: 0,
+    cal: 543, p: 79.7, c: 28, f: 9.3, fb: 0.4, s: 0,
     desc: "250g raw chicken breast + 100g cooked white rice"
   },
   {
     name: "Tuna Salad Plate (185g tuna + salad + 1 pita)",
-    cal: 175 + 40 + 170,
-    p: +(40 + 2 + 6).toFixed(1),
-    c: +(0 + 8 + 35).toFixed(1),
-    f: +(1.5 + 0.5 + 1).toFixed(1),
-    fb: +(0 + 2 + 3).toFixed(1), s: 0,
+    cal: 385, p: 48, c: 43, f: 3, fb: 5, s: 0,
     desc: "185g canned tuna + tomato cucumber salad + 1 aish baladi"
   },
   {
     name: "Post Workout Shake (2 scoops whey + banana + skimmed milk)",
-    cal: 2*120 + 89 + 70,
-    p: +(2*25 + 1.1 + 7).toFixed(1),
-    c: +(2*3 + 23 + 10).toFixed(1),
-    f: +(2*2 + 0.3 + 0.2).toFixed(1),
-    fb: 2.6, s: +(0 + 12 + 0).toFixed(1),
+    cal: 399, p: 58.1, c: 39, f: 4.5, fb: 2.6, s: 12,
     desc: "2 whey protein scoops + 1 banana + 200ml skimmed milk"
   },
 ];
@@ -746,7 +721,7 @@ export default function Tracker() {
                 <div>
                   <input style={{ ...S.inp, marginBottom: 10 }} placeholder={"Search " + FOOD_DB.length + " foods..."}
                     value={foodSearch} onChange={function(e) { setFoodSearch(e.target.value); }} autoFocus />
-                  {!foodSearch && <div style={{ fontSize: 10, color: "#444", marginBottom: 8 }}>Showing common foods — type to search all</div>}
+                  {!foodSearch && <div style={{ fontSize: 10, color: "#444", marginBottom: 8 }}>Showing common foods - type to search all</div>}
                   <div style={{ maxHeight: 260, overflowY: "auto", marginBottom: 12 }}>
                     {filtered.length === 0 && <div style={{ color: "#444", fontSize: 12 }}>No results. Add custom below.</div>}
                     {filtered.map(function(f) {
@@ -881,7 +856,7 @@ export default function Tracker() {
           </div>
 
           <div style={{ ...S.tip, borderColor: "#2a1a2a", color: "#888" }}>
-            WHO recommends max 25g added sugar/day for fat loss. One Nescafe Latte can = 20g — nearly your entire budget. Switch to black coffee or Americano and save 20g instantly every day.
+            WHO recommends max 25g added sugar/day for fat loss. One Nescafe Latte can = 20g - nearly your entire budget. Switch to black coffee or Americano and save 20g instantly every day.
           </div>
         </div>
       )}
@@ -1078,7 +1053,7 @@ export default function Tracker() {
           </div>
 
           <div style={{ ...S.tip, borderColor: "#1a2a2a" }}>
-            BMI: {(108 / (1.83 * 1.83)).toFixed(1)} — target 85-90kg. At 1kg+ per week that is about 3 months. Protect muscle with 200g protein daily.
+            BMI: {(108 / (1.83 * 1.83)).toFixed(1)} - target 85-90kg. At 1kg+ per week that is about 3 months. Protect muscle with 200g protein daily.
           </div>
         </div>
       )}
