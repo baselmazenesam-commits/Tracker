@@ -225,21 +225,21 @@ const FOOD_DB = [
   // Homemade
   { name: "Homemade Cake slice (100g)", cal: 350, p: 4, c: 52, f: 14, fb: 1, s: 30 },
   // Vitamins & Supplements
-  { name: "Vitamin C (500mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { vitc: 500 } },
-  { name: "Vitamin C (1000mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { vitc: 1000 } },
-  { name: "Vitamin B12 (500mcg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { b12: 500 } },
-  { name: "Vitamin B12 (1000mcg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { b12: 1000 } },
-  { name: "Vitamin D3 (1000 IU)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { d3: 1000 } },
-  { name: "Vitamin D3 (2000 IU)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { d3: 2000 } },
-  { name: "Zinc (10mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { zinc: 10 } },
-  { name: "Zinc (25mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { zinc: 25 } },
-  { name: "Magnesium (200mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { mag: 200 } },
-  { name: "Magnesium (400mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { mag: 400 } },
-  { name: "Omega 3 Fish Oil (1000mg)", cal: 9, p: 0, c: 0, f: 1, fb: 0, s: 0, vit: { omega3: 1000 } },
-  { name: "Multivitamin (1 tablet)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { multi: 1 } },
-  { name: "Iron (18mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { iron: 18 } },
-  { name: "Creatine Monohydrate (5g)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { creatine: 5000 } },
-  { name: "Vitamin B Complex (1 tablet)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0, vit: { bcomplex: 1 } },
+  { name: "Vitamin C (500mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Vitamin C (1000mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Vitamin B12 (500mcg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Vitamin B12 (1000mcg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Vitamin D3 (1000 IU)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Vitamin D3 (2000 IU)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Zinc (10mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Zinc (25mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Magnesium (200mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Magnesium (400mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Omega 3 Fish Oil (1000mg)", cal: 9, p: 0, c: 0, f: 1, fb: 0, s: 0 },
+  { name: "Multivitamin (1 tablet)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Iron (18mg)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "Creatine Monohydrate (5g)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
+  { name: "B Complex (B12 1000mcg + B6 + Biotin + Folic Acid)", cal: 0, p: 0, c: 0, f: 0, fb: 0, s: 0 },
 ];
 
 const POPULAR = [
@@ -274,18 +274,6 @@ const TIPS = [
   "Consistency beats perfection. One bad meal changes nothing.",
 ];
 
-const VITAMINS_LIST = [
-  { key: "vitc", label: "Vitamin C", unit: "mg", goal: 1000, color: "#ff9a4a", desc: "Immunity, skin, iron absorption" },
-  { key: "b12", label: "Vitamin B12", unit: "mcg", goal: 500, color: "#4a9aff", desc: "Energy, nerve function, metabolism" },
-  { key: "d3", label: "Vitamin D3", unit: "IU", goal: 2000, color: "#e8ff4a", desc: "Bones, immunity, testosterone" },
-  { key: "zinc", label: "Zinc", unit: "mg", goal: 25, color: "#4affca", desc: "Testosterone, immunity, wound healing" },
-  { key: "mag", label: "Magnesium", unit: "mg", goal: 400, color: "#a04aff", desc: "Sleep, muscle recovery, stress" },
-  { key: "omega3", label: "Omega-3", unit: "mg", goal: 1000, color: "#4aff9a", desc: "Heart, joints, brain, inflammation" },
-  { key: "iron", label: "Iron", unit: "mg", goal: 18, color: "#ff4a4a", desc: "Energy, blood oxygen, fatigue" },
-  { key: "creatine", label: "Creatine", unit: "mg", goal: 5000, color: "#ff4a9a", desc: "Muscle strength, lean mass, power" },
-  { key: "bcomplex", label: "B Complex", unit: "tablet", goal: 1, color: "#ffca4a", desc: "Energy, brain, metabolism" },
-  { key: "multi", label: "Multivitamin", unit: "tablet", goal: 1, color: "#aaaaaa", desc: "General nutritional insurance" },
-];
 
 const TIMELINE = [
   { date: "01 Jun", weeks: 1.4, projected: 106.8 },
@@ -431,7 +419,6 @@ export default function Tracker() {
     { key: "food", icon: "🍽", label: "Food" },
     { key: "sugar", icon: "🍬", label: "Sugar" },
     { key: "water", icon: "💧", label: "Water" },
-    { key: "vitamins", icon: "💊", label: "Vitamins" },
     { key: "suggest", icon: "💡", label: "Ideas" },
     { key: "stats", icon: "📊", label: "Stats" },
   ];
@@ -441,7 +428,7 @@ export default function Tracker() {
       <div style={HDR}>
         <div style={ROW}>
           <div>
-            <div style={{ fontSize: 18, fontWeight: 900 }}>BODY LOG <span style={{ fontSize: 12 }}>🔥</span> <span style={{ fontSize: 10, color: "#e8ff4a" }}>v14</span></div>
+            <div style={{ fontSize: 18, fontWeight: 900 }}>BODY LOG <span style={{ fontSize: 12 }}>🔥</span> <span style={{ fontSize: 10, color: "#e8ff4a" }}>v15</span></div>
             <div style={{ fontSize: 10, color: "#444", marginTop: 2 }}>108kg - 183cm - 24y - 1800 kcal</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
@@ -528,6 +515,43 @@ export default function Tracker() {
               </div>
             </div>
           ))}
+
+          {/* Total intake weight */}
+          {day.food.length > 0 && (
+            <div style={card({ background: "#0f0f1a", borderColor: "#2a2a4a" })}>
+              <div style={LBL}>Total Intake Today</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, textAlign: "center" }}>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#a04aff" }}>
+                    {(day.food.reduce((sum, f) => {
+                      const q = f.name.match(/x(\d+\.?\d*)/);
+                      const qty = q ? parseFloat(q[1]) : 1;
+                      const baseWeight = f.cal > 0 ? Math.round(f.cal / 1.5) : 10;
+                      return sum + baseWeight * qty;
+                    }, 0) / 1000).toFixed(2)}kg
+                  </div>
+                  <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>food weight</div>
+                  <div style={{ fontSize: 9, color: "#333" }}>est.</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#4a9aff" }}>
+                    {water >= 1000 ? (water/1000).toFixed(2)+"L" : water+"ml"}
+                  </div>
+                  <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>water</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#4aff9a" }}>
+                    {((day.food.reduce((sum, f) => {
+                      const q = f.name.match(/x(\d+\.?\d*)/);
+                      const qty = q ? parseFloat(q[1]) : 1;
+                      return sum + Math.round(f.cal / 1.5) * qty;
+                    }, 0) + water) / 1000).toFixed(2)}kg
+                  </div>
+                  <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>total in stomach</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Search bar always visible */}
           <div style={card({})}>
@@ -765,38 +789,6 @@ export default function Tracker() {
               <div><div style={{ fontSize: 20 }}>📊</div><div style={{ fontSize: 15, fontWeight: 900, color: "#4a9aff", marginTop: 4 }}>{Math.round(waterPct)}%</div><div style={{ fontSize: 10, color: "#444" }}>done</div></div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* VITAMINS TAB */}
-      {!loading && tab === "vitamins" && (
-        <div style={SEC}>
-          <div style={{ ...TIP, borderColor: "#2a1a3a" }}>
-            Log vitamins from the Food tab by searching their name e.g. "vitamin c", "zinc", "creatine". They show up here automatically.
-          </div>
-          {VITAMINS_LIST.map(vit => {
-            const logged = day.food.reduce((sum, f) => sum + ((f.vit && f.vit[vit.key]) || 0), 0);
-            const pct = Math.min((logged / vit.goal) * 100, 100);
-            const done = pct >= 100;
-            return (
-              <div key={vit.key} style={card({ borderColor: done ? vit.color : "#1e1e1e" })}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: done ? vit.color : "#ddd" }}>{done ? "✓ " : ""}{vit.label}</div>
-                    <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>{vit.desc}</div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ fontSize: 14, fontWeight: 900, color: vit.color }}>{logged}/{vit.goal}</div>
-                    <div style={{ fontSize: 9, color: "#555" }}>{vit.unit}</div>
-                  </div>
-                </div>
-                <div style={{ background: "#1a1a1a", borderRadius: 20, height: 6, overflow: "hidden" }}>
-                  <div style={{ width: pct+"%", height: "100%", background: vit.color, borderRadius: 20, transition: "width 0.5s" }} />
-                </div>
-                {!done && <div style={{ fontSize: 10, color: "#444", marginTop: 4 }}>{vit.goal - logged} {vit.unit} remaining</div>}
-              </div>
-            );
-          })}
         </div>
       )}
 
