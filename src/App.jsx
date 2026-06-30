@@ -628,6 +628,179 @@ COACHING STYLE:
   );
 }
 
+// ── Vault: password-gated progress photos ──
+function loadVaultPhotos() {
+  try { return JSON.parse(localStorage.getItem("bodylog_vault_photos") || "[]"); } catch(e) { return []; }
+}
+function saveVaultPhotos(photos) {
+  try { localStorage.setItem("bodylog_vault_photos", JSON.stringify(photos)); } catch(e) {}
+}
+function getVaultPassword() {
+  try { return localStorage.getItem("bodylog_vault_pass") || ""; } catch(e) { return ""; }
+}
+function setVaultPassword(pass) {
+  try { localStorage.setItem("bodylog_vault_pass", pass); } catch(e) {}
+}
+
+function VaultTab() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [pwInput, setPwInput] = useState("");
+  const [error, setError] = useState("");
+  const [hasPassword, setHasPassword] = useState(() => !!getVaultPassword());
+  const [photos, setPhotos] = useState(() => loadVaultPhotos());
+  const [photoNote, setPhotoNote] = useState("");
+  const [uploadError, setUploadError] = useState("");
+
+  function handleUnlock() {
+    if (pwInput === getVaultPassword()) {
+      setUnlocked(true);
+      setError("");
+      setPwInput("");
+    } else {
+      setError("Wrong password");
+      setPwInput("");
+    }
+  }
+
+  function handleSetPassword() {
+    if (pwInput.length < 4) { setError("Password must be at least 4 characters"); return; }
+    setVaultPassword(pwInput);
+    setHasPassword(true);
+    setUnlocked(true);
+    setPwInput("");
+    setError("");
+  }
+
+  function handleFileUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 3 * 1024 * 1024) {
+      setUploadError("Photo too large (max 3MB). Try a smaller photo or screenshot.");
+      e.target.value = "";
+      return;
+    }
+
+    setUploadError("");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newPhoto = {
+        id: Date.now(),
+        data: reader.result,
+        date: new Date().toISOString().split("T")[0],
+        note: photoNote,
+      };
+      try {
+        const updated = [newPhoto, ...photos];
+        setPhotos(updated);
+        saveVaultPhotos(updated);
+        setPhotoNote("");
+      } catch (err) {
+        setUploadError("Storage full — delete some old photos first.");
+      }
+    };
+    reader.onerror = () => setUploadError("Couldn't read that photo. Try a different one.");
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  }
+
+  function deletePhoto(id) {
+    const updated = photos.filter(p => p.id !== id);
+    setPhotos(updated);
+    saveVaultPhotos(updated);
+  }
+
+  // ── Locked screen ──
+  if (!unlocked) {
+    return (
+      <div style={SEC}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 60 }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔒</div>
+          <div style={{ fontSize: 16, fontWeight: 900, color: "#f0f0f0", marginBottom: 6 }}>
+            {hasPassword ? "Vault Locked" : "Set Up Your Vault"}
+          </div>
+          <div style={{ fontSize: 12, color: "#555", marginBottom: 24, textAlign: "center", maxWidth: 260 }}>
+            {hasPassword ? "Enter your password to view progress photos." : "Create a password to protect your private progress photos."}
+          </div>
+          <input
+            type="password"
+            style={{ ...INP, maxWidth: 260, textAlign: "center", fontSize: 16, marginBottom: 10 }}
+            placeholder={hasPassword ? "Enter password" : "Create password (4+ chars)"}
+            value={pwInput}
+            onChange={e => { setPwInput(e.target.value); setError(""); }}
+            onKeyDown={e => e.key === "Enter" && (hasPassword ? handleUnlock() : handleSetPassword())}
+          />
+          {error && <div style={{ fontSize: 11, color: "#ff5a5a", marginBottom: 10 }}>{error}</div>}
+          <button
+            onClick={hasPassword ? handleUnlock : handleSetPassword}
+            style={{ ...btn(), maxWidth: 260, width: "100%", padding: 12 }}
+          >
+            {hasPassword ? "Unlock" : "Set Password"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Unlocked: photo gallery ──
+  return (
+    <div style={SEC}>
+      <div style={{ ...ROW, marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: "#4aff9a", fontWeight: 800 }}>🔓 Vault Unlocked</div>
+        <button onClick={() => setUnlocked(false)} style={{ ...btn("#1a1a1a","#888"), fontSize: 10, padding: "5px 10px", border: "1px solid #2a2a2a" }}>Lock</button>
+      </div>
+
+      <div style={card({})}>
+        <div style={LBL}>Add Progress Photo</div>
+        <input style={{ ...INP, marginBottom: 10 }} placeholder="Note (optional) e.g. Week 4 front"
+          value={photoNote} onChange={e => setPhotoNote(e.target.value)} />
+        <input id="vault-camera-input" type="file" accept="image/*" capture="environment"
+          style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}
+          onChange={handleFileUpload} />
+        <input id="vault-gallery-input" type="file" accept="image/*"
+          style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}
+          onChange={handleFileUpload} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          <label htmlFor="vault-camera-input"
+            style={{ ...btn(), display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box", cursor: "pointer", WebkitTapHighlightColor: "transparent" }}>
+            📸 Take Photo
+          </label>
+          <label htmlFor="vault-gallery-input"
+            style={{ ...btn("#1a2a1a","#4aff9a"), border: "1px solid #2a4a2a", display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box", cursor: "pointer", WebkitTapHighlightColor: "transparent" }}>
+            🖼 From Gallery
+          </label>
+        </div>
+        {uploadError && <div style={{ fontSize: 11, color: "#ff5a5a", marginTop: 8 }}>{uploadError}</div>}
+      </div>
+
+      {photos.length === 0 && (
+        <div style={{ textAlign: "center", color: "#333", fontSize: 12, padding: 30 }}>No photos saved yet.</div>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {photos.map(p => (
+          <div key={p.id} style={{ background: "#111", border: "1px solid #1e1e1e", borderRadius: 10, overflow: "hidden" }}>
+            <img src={p.data} alt={p.date} style={{ width: "100%", height: 160, objectFit: "cover", display: "block" }} />
+            <div style={{ padding: 8 }}>
+              <div style={{ fontSize: 10, color: "#888", marginBottom: 2 }}>{p.date}</div>
+              {p.note && <div style={{ fontSize: 10, color: "#555", marginBottom: 6 }}>{p.note}</div>}
+              <button onClick={() => deletePhoto(p.id)}
+                style={{ ...btn("#1a0f0f","#ff5a5a"), fontSize: 9, padding: "4px 8px", border: "1px solid #3a1a1a", width: "100%" }}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ ...TIP, marginTop: 12 }}>
+        Photos are stored only on this device's browser storage. This is a basic password gate, not real encryption — don't rely on it for highly sensitive content.
+      </div>
+    </div>
+  );
+}
+
+
 export default function Tracker() {
   const [date, setDate] = useState(TODAY);
   const [day, setDay] = useState({ food: [], weight: null, water: 0, dayType: "rest" });
@@ -641,8 +814,6 @@ export default function Tracker() {
   const [showMeals, setShowMeals] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   const [qty, setQty] = useState("1");
-  const [suggestions, setSuggestions] = useState(null);
-  const [fiberSuggestions, setFiberSuggestions] = useState(null);
   const [savedMeals, setSavedMeals] = useState([]);
   const [newMealName, setNewMealName] = useState("");
   const [customFoods, setCustomFoods] = useState(() => loadCustomFoods());
@@ -718,36 +889,12 @@ export default function Tracker() {
       })
     : [...customFoods, ...FOOD_DB.filter(f => POPULAR.includes(f.name))];
 
-  function generateSuggestions() {
-    const calLeft = goals.calories - Math.round(totals.cal);
-    const protLeft = goals.protein - Math.round(totals.p);
-    const scored = FOOD_DB.map(f => {
-      let score = 0;
-      if (protLeft > 0) score += (f.p / Math.max(f.cal,1)) * 60;
-      if (f.cal > calLeft * 0.9) score -= 30;
-      score += Math.random() * 25;
-      return { ...f, score };
-    });
-    setSuggestions(scored.sort((a,b) => b.score-a.score).slice(0,5));
-  }
-
-  function generateFiberSuggestions() {
-    const calLeft = goals.calories - Math.round(totals.cal);
-    const scored = FOOD_DB.filter(f => f.fb > 0).map(f => {
-      let score = (f.fb / Math.max(f.cal,1)) * 80;
-      if (f.cal > calLeft * 0.9) score -= 40;
-      score += Math.random() * 20;
-      return { ...f, score };
-    });
-    setFiberSuggestions(scored.sort((a,b) => b.score-a.score).slice(0,5));
-  }
-
   const TABS = [
     { key: "food",    icon: "🍽",  label: "Food"   },
     { key: "water",   icon: "💧",  label: "Water"  },
-    { key: "suggest", icon: "💡",  label: "Ideas"  },
     { key: "stats",   icon: "📊",  label: "Stats"  },
     { key: "ai",      icon: "🤖",  label: "Coach"  },
+    { key: "vault",   icon: "🔒",  label: "Vault"  },
   ];
 
   const visibleTimeline = TIMELINE.filter(item => !(milestoneState[item.dateStr] || {}).dismissed);
@@ -1021,67 +1168,6 @@ export default function Tracker() {
         </div>
       )}
 
-      {/* SUGGEST TAB */}
-      {!loading && tab === "suggest" && (
-        <div style={SEC}>
-          <div style={card({})}>
-            <div style={LBL}>Still Needed Today</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6, textAlign: "center", marginTop: 6 }}>
-              <div><div style={{ fontSize: 18, fontWeight: 900, color: calRemaining<0?"#ff5a5a":"#e8ff4a" }}>{calRemaining}</div><div style={{ fontSize: 9, color: "#444" }}>kcal</div></div>
-              <div><div style={{ fontSize: 18, fontWeight: 900, color: "#4a9aff" }}>{Math.max(goals.protein-Math.round(totals.p),0)}g</div><div style={{ fontSize: 9, color: "#444" }}>protein</div></div>
-              <div><div style={{ fontSize: 18, fontWeight: 900, color: "#4affca" }}>{Math.max(goals.fiber-Math.round(totals.fb),0)}g</div><div style={{ fontSize: 9, color: "#444" }}>fiber</div></div>
-              <div><div style={{ fontSize: 18, fontWeight: 900, color: "#60aaff" }}>{Math.max(goals.water-water,0)}ml</div><div style={{ fontSize: 9, color: "#444" }}>water</div></div>
-            </div>
-          </div>
-          <button onClick={generateSuggestions} style={{ ...btn(), width: "100%", padding: 14, fontSize: 13, marginBottom: 12 }}>
-            {suggestions ? "Shuffle" : "Suggest What to Eat"}
-          </button>
-          {!suggestions && <div style={{ textAlign: "center", color: "#333", fontSize: 12, marginBottom: 20, lineHeight: 2 }}>Picks best foods based on what you still need.</div>}
-          {suggestions && suggestions.map((f,i) => (
-            <div key={i} style={card({ borderColor: i===0?"#253525":"#1e1e1e", marginBottom: 10 })}>
-              {i===0 && <div style={{ fontSize: 9, color: "#4aff9a", fontWeight: 900, marginBottom: 6 }}>BEST PICK</div>}
-              <div style={ROW}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, color: "#ddd", fontWeight: 700, marginBottom: 4 }}>{f.name}</div>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <span style={{ fontSize: 11, color: "#e8ff4a" }}>{f.cal} kcal</span>
-                    <span style={mac("#4a9aff")}>P:{f.p}g</span>
-                    {f.fb>0 && <span style={mac("#4affca")}>Fb:{f.fb}g</span>}
-                  </div>
-                </div>
-                <button onClick={() => { setTab("food"); setSelectedFood(f); setQty("1"); }}
-                  style={{ ...btn("#1a2a1a","#4aff9a"), fontSize: 11, padding: "6px 10px", border: "1px solid #2a4a2a", marginLeft: 8 }}>+ Add</button>
-              </div>
-            </div>
-          ))}
-          <div style={{ borderTop: "1px solid #1a1a1a", marginTop: 8, paddingTop: 16 }}>
-            <div style={{ fontSize: 11, color: "#4affca", letterSpacing: 1, textTransform: "uppercase", marginBottom: 4 }}>Fiber Boost</div>
-            <div style={{ fontSize: 11, color: "#555", marginBottom: 10 }}>
-              {Math.round(totals.fb)}g of {goals.fiber}g today. {totals.fb>=goals.fiber?"Goal hit!":(goals.fiber-Math.round(totals.fb))+"g still needed."}
-            </div>
-            <button onClick={generateFiberSuggestions} style={{ ...btn("#0f1f1a","#4affca"), width: "100%", padding: 14, fontSize: 13, marginBottom: 12, border: "1px solid #1a3a2a" }}>
-              {fiberSuggestions?"Shuffle Fiber Foods":"Find High Fiber Foods"}
-            </button>
-            {fiberSuggestions && fiberSuggestions.map((f,i) => (
-              <div key={i} style={card({ borderColor: i===0?"#1a352a":"#1e1e1e", marginBottom: 10 })}>
-                {i===0 && <div style={{ fontSize: 9, color: "#4affca", fontWeight: 900, marginBottom: 6 }}>BEST FIBER PICK</div>}
-                <div style={ROW}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 12, color: "#ddd", fontWeight: 700, marginBottom: 4 }}>{f.name}</div>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontSize: 11, color: "#e8ff4a" }}>{f.cal} kcal</span>
-                      <span style={{ fontSize: 11, color: "#4affca", fontWeight: 700 }}>Fiber: {f.fb}g</span>
-                      <span style={mac("#4a9aff")}>P:{f.p}g</span>
-                    </div>
-                  </div>
-                  <button onClick={() => { setTab("food"); setSelectedFood(f); setQty("1"); }}
-                    style={{ ...btn("#0f1f1a","#4affca"), fontSize: 11, padding: "6px 10px", border: "1px solid #1a3a2a", marginLeft: 8 }}>+ Add</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* STATS TAB */}
       {!loading && tab === "stats" && (
@@ -1180,6 +1266,11 @@ export default function Tracker() {
       {/* AI COACH TAB */}
       {!loading && tab === "ai" && (
         <AICoachTab day={day} dayType={dayType} />
+      )}
+
+      {/* VAULT TAB */}
+      {!loading && tab === "vault" && (
+        <VaultTab />
       )}
     </div>
   );
